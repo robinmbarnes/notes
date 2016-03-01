@@ -1,0 +1,20 @@
+.container {
+  width: 400px;
+  border: 1px solid grey;
+}
+
+.title {
+  composes: textInput from "styles/composables.css";
+  width: 100%;
+  font-weight: bold;
+}
+
+.body {
+  composes: textInput from "styles/composables.css";
+  width: 100%;
+  resize: none;
+}
+
+.hidden {
+  display: none;
+}
