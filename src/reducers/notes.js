@@ -1,3 +1,12 @@
 export default (state, action) => {
-  return [];
+  return [
+    {
+      title: 'A Note',
+      body: 'This is a note'
+    },
+    {
+      title: 'Another Note',
+      body: 'This is another note...'
+    }
+  ];
 };

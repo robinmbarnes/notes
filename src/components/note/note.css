@@ -1,0 +1,9 @@
+.note {
+  background-color: white;
+  border: 1px solid black;
+  box-shadow: 2px 3px 8px 0px rgba(0,0,0,0.75);
+  width: 200px;
+  min-height: 350px;
+  float: left;
+  margin-right: 20px;
+}
