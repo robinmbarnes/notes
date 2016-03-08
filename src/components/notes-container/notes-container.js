@@ -4,10 +4,10 @@ import classnames from 'classnames';
 import * as actions from 'actions';
 import Note from 'components/note/note';
 
-export default ({ notes }) => {
+export default ({ notes, dispatch }) => {
   return (
     <div className={ styles.container }>
-    { notes.map((note, i) => <Note note={ note } key={ i } />) }
+    { notes.map((note, i) => <Note note={ note } key={ i } dispatch={ dispatch } />) }
     </div>
   );
 };

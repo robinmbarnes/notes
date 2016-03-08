@@ -8,7 +8,7 @@ class App extends Component {
     return (
       <div>
         <CreateNote {...this.props.createNote} dispatch={ this.props.dispatch } />
-        <NotesContainer notes={ this.props.notes } />
+        <NotesContainer notes={ this.props.notes }  dispatch={ this.props.dispatch } />
       </div>
     );
   }

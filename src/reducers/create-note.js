@@ -16,6 +16,12 @@ export default (state, action) => {
       return merge(state, { title: action.titleText });
     case actionTypes.createNoteBodyChanged:
       return merge(state, { body: action.bodyText });
+    case actionTypes.createNoteSubmitted:
+      return merge(state, {
+        body: '',
+        title: '',
+        isFresh: true
+      });
     default:
       return state;
   }

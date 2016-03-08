@@ -3,7 +3,7 @@ import styles from './create-note.css';
 import classnames from 'classnames';
 import * as actions from 'actions';
 
-export default ({ isFresh, dispatch }) => {
+export default ({ isFresh, title, body, dispatch }) => {
   let titleClassNames = classnames({
     [styles.title]: true,
     [styles.hidden]: isFresh
@@ -18,16 +18,18 @@ export default ({ isFresh, dispatch }) => {
         className={ titleClassNames }
         type='text'
         placeholder='Title'
+        value={ title }
         onChange={ titleChanged(dispatch) }
       />
       <textarea
         className={ styles.body }
         placeholder='Add a note...'
+        value={ body }
         onChange={ bodyChanged(isFresh, dispatch) }
       >
       </textarea>
       <div className={ controlsClassNames }>
-        <a href='#'>Done</a>
+        <a href='#' onClick={ doneClicked(dispatch) }>Done</a>
       </div>
     </div>
   );
@@ -42,3 +44,8 @@ const bodyChanged = (isFresh, dispatch) => (changeEvent) => {
 
 const titleChanged = (dispatch) => (changeEvent) =>
   dispatch(actions.createNoteTitleChanged(changeEvent.target.value));
+
+const doneClicked = (dispatch) => (clickEvent) => {
+  clickEvent.preventDefault();
+  dispatch(actions.createNoteSubmitted());
+};
