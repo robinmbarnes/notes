@@ -6,4 +6,24 @@
   min-height: 350px;
   float: left;
   margin-right: 20px;
+  position: relative;
+}
+
+.delete {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: white;
+  border: 0px solid #000000;
+  border-radius: 200px 200px 200px 200px;
+}
+
+.delete a {
+  color: black;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  line-height: 20px;
 }

@@ -23,6 +23,8 @@ export default (state, action) => {
       return state.map(note => {
         return merge(note, { isSelected: (note._id === action._id) });
       });
+    case actionTypes.noteDeleted:
+      return state.filter(note => note._id !== action._id);
     default:
       return state;
   }

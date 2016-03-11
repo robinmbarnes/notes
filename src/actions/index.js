@@ -6,7 +6,8 @@ export const actionTypes = constantKeys([
   'createNoteBodyChanged',
   'createNoteTitleChanged',
   'createNoteSubmitted',
-  'noteSelected'
+  'noteSelected',
+  'noteDeleted'
 ]);
 
 export function createNoteTouched () {
@@ -43,6 +44,13 @@ export function createNoteSubmitted () {
 export function noteSelected (_id) {
   return {
     type: actionTypes.noteSelected,
+    _id
+  };
+}
+
+export function noteDeleted (_id) {
+  return {
+    type: actionTypes.noteDeleted,
     _id
   };
 }
