@@ -7,6 +7,11 @@ export default function (state, action) {
   }
 
   switch (action.type) {
+    case actionTypes.updateNoteSubmitted:
+    case actionTypes.cancelUpdateNote:
+      return {};
+    case actionTypes.noteSelected:
+      return { note: action.note };
     case actionTypes.updateNoteChanged:
       return { note: action.note };
     default:

@@ -1,5 +1,6 @@
 import { actionTypes } from 'actions';
 import merge from 'ramda/src/merge';
+import findIndex from 'ramda/src/findIndex';
 
 export default (state, action) => {
   if (state === void 0) {
@@ -17,6 +18,12 @@ export default (state, action) => {
     ];
   }
   switch (action.type) {
+    case actionTypes.updateNoteSubmitted:
+      const noteIndex = findNoteIndexById(action.note._id, state);
+      return state
+        .slice(0, noteIndex)
+        .concat(action.note)
+        .concat(state.slice(noteIndex + 1));
     case actionTypes.createNoteSubmitted:
       return [action.note].concat(state);
     case actionTypes.noteSelected:
@@ -29,3 +36,8 @@ export default (state, action) => {
       return state;
   }
 };
+
+const findNoteIndexById = (_id, notes) => findIndex(
+  note => note._id === _id,
+  notes
+);

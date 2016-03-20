@@ -8,6 +8,7 @@ export const actionTypes = constantKeys([
   'createNoteSubmitted',
   'noteSelected',
   'noteDeleted',
+  'cancelUpdateNote',
   'updateNoteChanged',
   'updateNoteSubmitted'
 ]);
@@ -43,10 +44,10 @@ export function createNoteSubmitted () {
   };
 }
 
-export function noteSelected (_id) {
+export function noteSelected (note) {
   return {
     type: actionTypes.noteSelected,
-    _id
+    note
   };
 }
 
@@ -59,13 +60,20 @@ export function noteDeleted (_id) {
 
 export function updateNoteChanged (note) {
   return {
-    type: updateNoteChanged,
+    type: actionTypes.updateNoteChanged,
     note
   };
 }
 
-export function updateNoteSubmitted () {
+export function updateNoteSubmitted (note) {
   return {
-    type: actionTypes.updateNoteSubmitted
+    type: actionTypes.updateNoteSubmitted,
+    note
+  };
+}
+
+export function cancelUpdateNote () {
+  return {
+    type: actionTypes.cancelUpdateNote
   };
 }

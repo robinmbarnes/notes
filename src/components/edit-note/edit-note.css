@@ -15,4 +15,23 @@
   top: 50%;
   margin: 0 auto;
   transform: translate(0px,-150px);
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.title {
+  composes: textInput from "styles/composables.css";
+  composes: title from "styles/note.css";
+  display: block;
+  width: 480px;
+}
+
+.body {
+  composes: textInput from "styles/composables.css";
+  composes: body from "styles/note.css";
+  width: 480px;
+}
+
+.hidden {
+  display: none;
 }

@@ -1,28 +1,34 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styles from './edit-note.css';
 import merge from 'ramda/src/merge';
 import * as actions from 'actions';
 
-export default function render ({ note, dispatch }) {
+export default ({ note, dispatch }) => {
   if (!note) {
-    return null;
+    return <div className={ styles.hidden } />;
   }
+  const { _id, title, body } = note;
   return(
     <div className={ styles.container }>
       <div className={ styles.editor }>
-      <input
-        /*className={ titleClassNames }*/
-        type='text'
-        placeholder='Title'
-        value={ title }
-        onChange={ handleChange(dispatch, note, 'title') }
-      />
-      <textarea
-        className={ styles.body }
-        placeholder='Add a note...'
-        value={ body }
-        onChange={ handleChange(dispatch, note, 'body') }
-      ></textarea>
+        <input
+          className={ styles.title }
+          type='text'
+          placeholder='Title'
+          value={ title }
+          onChange={ handleChange(dispatch, note, 'title') }
+        />
+        <textarea
+          className={ styles.body }
+          placeholder='Add a note...'
+          value={ body }
+          onChange={ handleChange(dispatch, note, 'body') }
+        ></textarea>
+        <div className={ styles.controls }>
+          <a href="#" onClick={ doneClicked(dispatch, note) }>Done</a>
+          &nbsp;
+          <a href="#" onClick={ cancelClicked(dispatch) }>Cancel</a>
+        </div>
       </div>
     </div>
   );
@@ -34,7 +40,12 @@ const handleChange = (dispatch, note, field) => (changeEvent) =>
     )
   );
 
-const doneClicked = (dispatch) => (clickEvent) => {
+const doneClicked = (dispatch, note) => (clickEvent) => {
   clickEvent.preventDefault();
-  dispatch(actions.updateNoteSubmitted());
+  dispatch(actions.updateNoteSubmitted(note));
+};
+
+const cancelClicked = (dispatch) => (clickEvent) => {
+  clickEvent.preventDefault();
+  dispatch(actions.cancelUpdateNote());
 };
