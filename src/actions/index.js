@@ -10,7 +10,10 @@ export const actionTypes = constantKeys([
   'noteDeleted',
   'cancelUpdateNote',
   'updateNoteChanged',
-  'updateNoteSubmitted'
+  'updateNoteSubmitted',
+  'noteDropZoneActivated',
+  'noteDragStart',
+  'noteDropReady'
 ]);
 
 export function createNoteTouched () {
@@ -75,5 +78,26 @@ export function updateNoteSubmitted (note) {
 export function cancelUpdateNote () {
   return {
     type: actionTypes.cancelUpdateNote
+  };
+}
+
+export function noteDragStart (note) {
+  return {
+    type: actionTypes.noteDragStart,
+    note
+  };
+}
+
+export function noteDropZoneActivated (note) {
+  return {
+    type: actionTypes.noteDropZoneActivated,
+    note
+  };
+}
+
+export function noteDropReady (note) {
+  return {
+    type: actionTypes.noteDropReady,
+    note
   };
 }

@@ -10,9 +10,10 @@ import noteApp from 'reducers';
 import 'styles/global.css';
 import 'babel-polyfill';
 import 'babel-core/register';
+import dragAndDrop from 'middleware/drag-and-drop';
 
 const logger = createLogger();
-const createStoreWithMiddleware = applyMiddleware(thunk, promise, logger)(createStore);
+const createStoreWithMiddleware = applyMiddleware(thunk, promise, logger, dragAndDrop)(createStore);
 const store = createStoreWithMiddleware(noteApp);
 
 let rootElement = document.getElementById('root');

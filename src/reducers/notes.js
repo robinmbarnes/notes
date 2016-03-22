@@ -32,6 +32,8 @@ export default (state, action) => {
       });
     case actionTypes.noteDeleted:
       return state.filter(note => note._id !== action._id);
+    case actionTypes.noteDropZoneActivated:
+      return state;
     default:
       return state;
   }
