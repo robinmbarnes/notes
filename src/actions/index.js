@@ -89,15 +89,16 @@ export function noteDragStart (note) {
 }
 
 export function noteDropZoneActivated (note) {
-  return {
-    type: actionTypes.noteDropZoneActivated,
-    note
+  return (dispatch, getState) => {
+    if (note._id !== getState().dragAndDrop.draggedNoteId) {
+      dispatch(noteDropReady(note._id));
+    }
   };
 }
 
-export function noteDropReady (note) {
+export function noteDropReady (_id) {
   return {
     type: actionTypes.noteDropReady,
-    note
+    _id
   };
 }

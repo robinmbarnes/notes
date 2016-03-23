@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import styles from './note.css';
 import * as actions from 'actions';
+import classnames from 'classNames';
 
 export default ({ note, dispatch }) => {
+  const noteClassNames = classnames({
+    [styles.note]: true,
+    [styles.isDropReady]: !!note.isDropReady
+  });
   return (
     <div
-      className={ styles.note }
+      className={ noteClassNames }
       onClick={ selectNote(note, dispatch) }
       draggable='true'
       onDragOver={ onDragOver(dispatch, note) }

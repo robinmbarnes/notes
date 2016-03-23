@@ -29,6 +29,6 @@
   line-height: 20px;
 }
 
-.dropZoneActivated {
+.isDropReady {
   margin-left: 200px;
 }

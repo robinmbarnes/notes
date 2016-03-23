@@ -32,8 +32,10 @@ export default (state, action) => {
       });
     case actionTypes.noteDeleted:
       return state.filter(note => note._id !== action._id);
-    case actionTypes.noteDropZoneActivated:
-      return state;
+    case actionTypes.noteDropReady:
+      return state.map(note => {
+        return merge(note, { isDropReady: (note._id === action._id) });
+      });
     default:
       return state;
   }
