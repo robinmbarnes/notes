@@ -7,7 +7,13 @@ import Note from 'components/note/note';
 export default ({ notes, dispatch }) => {
   return (
     <div className={ styles.container }>
-    { notes.map((note, i) => <Note note={ note } key={ i } dispatch={ dispatch } />) }
+    { notes.map((note, i) =>
+      <Note
+        note={ note }
+        key={ note._id }
+        dispatch={ dispatch }
+        position={ i }
+      />) }
     </div>
   );
 };

@@ -33,9 +33,24 @@ export default (state, action) => {
     case actionTypes.noteDeleted:
       return state.filter(note => note._id !== action._id);
     case actionTypes.noteDropReady:
-      return state.map(note => {
-        return merge(note, { isDropReady: (note._id === action._id) });
-      });
+      const toPosition = action.dropZonePosition;
+      const fromPosition = action.positionOfDraggedNote;
+      const isToTheLeft = (toPosition < fromPosition);
+      return state.reduce((newState, note, i, currentState) => {
+        if (i === toPosition) {
+          return newState.concat(currentState[fromPosition]);
+        }
+        if (isToTheLeft) {
+          if (i > toPosition && i <= fromPosition) {
+            return newState.concat(currentState[i - 1]);
+          }
+        } else {
+          if (i >= fromPosition && i < toPosition) {
+            return newState.concat(currentState[i + 1]);
+          }
+        }
+        return newState.concat(note);
+      }, []);
     default:
       return state;
   }

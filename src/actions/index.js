@@ -13,7 +13,8 @@ export const actionTypes = constantKeys([
   'updateNoteSubmitted',
   'noteDropZoneActivated',
   'noteDragStart',
-  'noteDropReady'
+  'noteDropReady',
+  'draggedNotePositionChanged'
 ]);
 
 export function createNoteTouched () {
@@ -81,24 +82,34 @@ export function cancelUpdateNote () {
   };
 }
 
-export function noteDragStart (note) {
+export function noteDragStart (position) {
   return {
     type: actionTypes.noteDragStart,
-    note
+    position
   };
 }
 
-export function noteDropZoneActivated (note) {
+export function noteDropZoneActivated (dropZonePosition) {
   return (dispatch, getState) => {
-    if (note._id !== getState().dragAndDrop.draggedNoteId) {
-      dispatch(noteDropReady(note._id));
+    const positionOfDraggedNote = getState().dragAndDrop.positionOfDraggedNote;
+    if (dropZonePosition !== positionOfDraggedNote) {
+      dispatch(noteDropReady(positionOfDraggedNote, dropZonePosition));
+      dispatch(draggedNotePositionChanged(dropZonePosition));
     }
   };
 }
 
-export function noteDropReady (_id) {
+export function draggedNotePositionChanged (position) {
+  return {
+    type: actionTypes.draggedNotePositionChanged,
+    position
+  };
+}
+
+export function noteDropReady (positionOfDraggedNote, dropZonePosition) {
   return {
     type: actionTypes.noteDropReady,
-    _id
+    positionOfDraggedNote,
+    dropZonePosition
   };
 }

@@ -8,6 +8,7 @@
   margin-right: 20px;
   position: relative;
   cursor: pointer;
+  z-index: 2;
 }
 
 .delete {
@@ -31,4 +32,19 @@
 
 .isDropReady {
   margin-left: 200px;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+.hidden {
+  display: none;
+}
+
+.notClone {
+  position: absolute;
+  z-index: 1;
+  transition: transform 0.5s;
+  transform: translate(0, 0);
 }
