@@ -5,6 +5,8 @@ import * as actions from 'actions';
 import classnames from 'classNames';
 import { connect } from 'react-redux';
 import { getLeftForElement, getTopForElement } from 'utils/dom';
+import NoteContent from 'components/note-content/note-content';
+import NoteDraggable from 'components/note-draggable/note-draggable';
 
 class Note extends Component {
   constructor () {
@@ -18,10 +20,11 @@ class Note extends Component {
   }
 
   render () {
-    const { note, dispatch, isDragInProgress, position } = this.props;
+    const { note, dispatch, position, positionOfDraggedNote } = this.props;
     const noteClassNames = classnames({
       [styles.note]: true,
-      [styles.notClone]: true
+      [styles.notClone]: true,
+      [styles.invisible]: (positionOfDraggedNote == position)
     });
     const noteCloneClassNames = classnames({
       [styles.note]: true,
@@ -90,6 +93,23 @@ class Note extends Component {
       });
     }
   }
+
+  render2 () {
+    const { note, dispatch, position } = this.props;
+    return (
+      <NoteDraggable
+        onDragStart={ onDragStart(dispatch, position) }
+        onDragEnter={ onDragEnter(dispatch, position) }
+      >
+        <NoteContent
+          note={ note }
+          onSelected={ selectNote(note, dispatch) }
+          onDeleteClicked={ deleteNote(note._id, dispatch) }
+        />
+        <NoteContent note={ note } />
+      </NoteDraggable>
+    );
+  }
 }
 
 const selectNote = (note, dispatch) => () => dispatch(actions.noteSelected(note));
@@ -107,7 +127,7 @@ const onDragEnter = (dispatch, position) => (dragEvent) => {
 
 const select = (state) => {
   return {
-    isDragInProgress: state.dragAndDrop.isDragInProgress || false
+    positionOfDraggedNote: state.dragAndDrop.positionOfDraggedNote
   };
 };
 
