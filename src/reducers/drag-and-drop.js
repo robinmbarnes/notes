@@ -13,6 +13,8 @@ export default (state, action) => {
       return merge(state, { positionOfDraggedNote: action.position });
     case actionTypes.draggedNotePositionChanged:
       return merge(state, { positionOfDraggedNote: action.position });
+    case actionTypes.noteDropped:
+      return merge(state, { positionOfDraggedNote: null });
     default:
       return state;
   }

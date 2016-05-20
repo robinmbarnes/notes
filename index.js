@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
@@ -12,7 +12,10 @@ import 'babel-polyfill';
 import 'babel-core/register';
 
 const logger = createLogger();
-const createStoreWithMiddleware = applyMiddleware(thunk, promise, logger)(createStore);
+const createStoreWithMiddleware = compose(
+  applyMiddleware(thunk, promise, logger),
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+)(createStore);
 const store = createStoreWithMiddleware(noteApp);
 
 let rootElement = document.getElementById('root');

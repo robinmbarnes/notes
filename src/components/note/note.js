@@ -5,8 +5,6 @@ import * as actions from 'actions';
 import classnames from 'classNames';
 import { connect } from 'react-redux';
 import { getLeftForElement, getTopForElement } from 'utils/dom';
-import NoteContent from 'components/note-content/note-content';
-import NoteDraggable from 'components/note-draggable/note-draggable';
 
 class Note extends Component {
   constructor () {
@@ -17,60 +15,66 @@ class Note extends Component {
       translateX: 0,
       translateY: 0
     };
+    this._onDragStart = this._onDragStart.bind(this);
+    this._onDragEnd = this._onDragEnd.bind(this);
+    this.clone = null;
   }
 
   render () {
+    const { position, positionOfDraggedNote, dispatch } = this.props;
+    const shouldClone = (
+      positionOfDraggedNote !== null &&
+      positionOfDraggedNote !== position
+    );
+    const clone = shouldClone ? this._renderContent(true) : null;
+    return (
+      <div
+        className={ styles.container }
+        onDragStart={ this._onDragStart }
+        onDragEnter={ onDragEnter(dispatch, position) }
+        onDragEnd={ this._onDragEnd }
+        draggable='true'
+      >
+        { this._renderContent(false) }
+        { clone }
+      </div>
+    );
+  }
+
+  _renderContent (isClone) {
     const { note, dispatch, position, positionOfDraggedNote } = this.props;
-    const noteClassNames = classnames({
-      [styles.note]: true,
-      [styles.notClone]: true,
-      [styles.invisible]: (positionOfDraggedNote == position)
+    const isInvisible = (
+      positionOfDraggedNote === position ||
+      (positionOfDraggedNote !== null && !isClone)
+    );
+    const contentClassNames = classnames({
+      [styles.content]: true,
+      [styles.isClone]: isClone,
+      [styles.invisible]: isInvisible
     });
-    const noteCloneClassNames = classnames({
-      [styles.note]: true,
-      [styles.invisible]: true
-    });
-    const noteStyle = {
+    const cloneStyle = {
       top: this.state.y,
       left: this.state.x,
       transform: `translate(${this.state.translateX}px, ${this.state.translateY}px)`
     };
+    const style = (isClone ? cloneStyle : {});
+    const ref = (!isClone ? 'content' : 'clone');
+
     return (
-      <div>
-        <div
-          ref='note'
-          className={noteClassNames}
-          onClick={ selectNote(note, dispatch) }
-          style={ noteStyle }
-          draggable='true'
-          onDragStart={ onDragStart(dispatch, position) }
-          onDragEnter={ onDragEnter(dispatch, position) }
-        >
-          <h2>{ note.title }</h2>
-          <div>{ note.body }</div>
-          <div className={ styles.delete }>
-            <a href='#' onClick={ deleteNote(note._id, dispatch) }>X</a>
-          </div>
-        </div>
-        <div
-          ref='noteClone'
-          className={ noteCloneClassNames }
-          onClick={ selectNote(note, dispatch) }
-        >
-          <h2>{ note.title }</h2>
-          <div>{ note.body }</div>
-          <div className={ styles.delete }>
-            <a href='#' onClick={ deleteNote(note._id, dispatch) }>X</a>
-          </div>
+      <div className={contentClassNames} ref={ref} style={style}>
+        <h2>{ note.title }</h2>
+        <div>{ note.body }</div>
+        <div className={ styles.delete }>
+          <a href='#' onClick={ deleteNote(note._id, dispatch) }>X</a>
         </div>
       </div>
     );
   }
 
   componentDidMount () {
-    const noteClone = ReactDom.findDOMNode(this.refs.noteClone);
-    const x = getLeftForElement(noteClone);
-    const y = getTopForElement(noteClone);
+    const contentNode = ReactDom.findDOMNode(this.refs.content);
+    const x = getLeftForElement(contentNode);
+    const y = getTopForElement(contentNode);
     this.setState({
       x,
       y
@@ -78,37 +82,50 @@ class Note extends Component {
   }
 
   componentDidUpdate () {
-    const noteClone = ReactDom.findDOMNode(this.refs.noteClone);
-    const cloneX = getLeftForElement(noteClone);
-    const cloneY = getTopForElement(noteClone);
-    let { translateX, translateY, x, y } = this.state;
+    const clone = ReactDom.findDOMNode(this.refs.clone);
+    const content = ReactDom.findDOMNode(this.refs.content);
+    if (!clone) {
+      return;
+    }
+    const x = getLeftForElement(content);
+    const y = getTopForElement(content);
+    const cloneX = getLeftForElement(clone);
+    const cloneY = getTopForElement(clone);
+    let { translateX, translateY } = this.state;
     if (cloneX !== (x + translateX) || cloneY !== (y + translateY)) {
-      const xDiff = cloneX - x;
-      const yDiff = cloneY - y;
-      this.setState({
-        x,
-        y,
-        translateX: xDiff,
-        translateY: yDiff
-      });
+      const xDiff = x - cloneX;
+      const yDiff = y - cloneY;
+      const newState = Object.assign(
+        {},
+        this.state,
+        {
+          translateX: xDiff + 2,
+          translateY: yDiff
+        }
+      );
+      //this.setState(newState);
     }
   }
 
-  render2 () {
-    const { note, dispatch, position } = this.props;
-    return (
-      <NoteDraggable
-        onDragStart={ onDragStart(dispatch, position) }
-        onDragEnter={ onDragEnter(dispatch, position) }
-      >
-        <NoteContent
-          note={ note }
-          onSelected={ selectNote(note, dispatch) }
-          onDeleteClicked={ deleteNote(note._id, dispatch) }
-        />
-        <NoteContent note={ note } />
-      </NoteDraggable>
-    );
+  _onDragStart (e) {
+    const { dispatch, position } = this.props;
+    const contentNode = ReactDom.findDOMNode(this.refs.content);
+    this.clone = contentNode.cloneNode(true);
+    this.clone.style.transform = 'translate(-10000px, -10000px)';
+    document.body.appendChild(this.clone);
+    const x = e.clientX - e.currentTarget.offsetLeft;
+    const y = e.clientY - e.currentTarget.offsetTop;
+    e.dataTransfer.setDragImage(this.clone, x, y);
+    dispatch(actions.noteDragStart(position));
+  }
+
+  _onDragEnd () {
+    const { dispatch } = this.props;
+    if (this.clone) {
+      this.clone.remove();
+      this.clone = null;
+    }
+    dispatch(actions.noteDropped());
   }
 }
 
@@ -116,10 +133,6 @@ const selectNote = (note, dispatch) => () => dispatch(actions.noteSelected(note)
 const deleteNote = (_id, dispatch) => (clickEvent) => {
   clickEvent.stopPropagation();
   dispatch(actions.noteDeleted(_id));
-};
-const onDragStart = (dispatch, position) => (dragEvent) => {
-  dragEvent.dataTransfer.dropEffect = 'move';
-  dispatch(actions.noteDragStart(position));
 };
 const onDragEnter = (dispatch, position) => (dragEvent) => {
   dispatch(actions.noteDropZoneActivated(position));

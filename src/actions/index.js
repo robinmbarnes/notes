@@ -14,8 +14,15 @@ export const actionTypes = constantKeys([
   'noteDropZoneActivated',
   'noteDragStart',
   'noteDropReady',
+  'noteDropped',
   'draggedNotePositionChanged'
 ]);
+
+function createAction (type, otherProps={}) {
+  return () => Object.assign({}, otherProps, { type });
+}
+
+export const noteDropped = createAction(actionTypes.noteDropped);
 
 export function createNoteTouched () {
   return {
