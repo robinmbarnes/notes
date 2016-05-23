@@ -1,8 +1,10 @@
-import { createNoteSaga, fetchNotesSaga } from './notes';
+import { createNoteSaga, fetchNotesSaga, deleteNoteSaga, updateNoteSaga } from './notes';
 
 export default function * () {
   yield [
     createNoteSaga(),
-    fetchNotesSaga()
+    fetchNotesSaga(),
+    deleteNoteSaga(),
+    updateNoteSaga()
   ];
 }

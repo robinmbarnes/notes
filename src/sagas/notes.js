@@ -8,9 +8,27 @@ function * fetchNotes () {
   yield put(requestNotesComplete(response.body));
 }
 
-function * createNote ({ title, body }) {
-  const response = yield call(request.post, 'http://localhost:8100/notes');
+function * createNote ({ note: { body, title } }) {
+  const data = { body, title };
+  yield call(
+    request.post,
+    'http://localhost:8100/notes',
+    { data }
+  );
   yield put(createNoteComplete());
+}
+
+function * updateNote ({ note: { _id, body, title } }) {
+  const data = { body, title, _id };
+  yield call(
+    request.put,
+    `http://localhost:8100/notes/${_id}`,
+    { data }
+  );
+}
+
+function * deleteNote ({ _id }) {
+  yield call(request.delete, `http://localhost:8100/notes/${_id}`);
 }
 
 export function * createNoteSaga () {
@@ -18,5 +36,13 @@ export function * createNoteSaga () {
 }
 
 export function * fetchNotesSaga () {
-  yield * takeLatest(actionTypes.requestNotes, fetchNotes);
+  yield * takeEvery(actionTypes.requestNotes, fetchNotes);
+}
+
+export function * deleteNoteSaga () {
+  yield * takeEvery(actionTypes.noteDeleted, deleteNote);
+}
+
+export function * updateNoteSaga () {
+  yield * takeEvery(actionTypes.updateNoteSubmitted, updateNote);
 }
