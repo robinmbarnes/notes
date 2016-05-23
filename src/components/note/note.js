@@ -61,7 +61,12 @@ class Note extends Component {
     const ref = (!isClone ? 'content' : 'clone');
 
     return (
-      <div className={contentClassNames} ref={ref} style={style}>
+      <div
+        className={contentClassNames}
+        ref={ref}
+        style={style}
+        onClick={selectNote(note, dispatch)}
+      >
         <h2>{ note.title }</h2>
         <div>{ note.body }</div>
         <div className={ styles.delete }>
@@ -89,21 +94,22 @@ class Note extends Component {
     }
     const x = getLeftForElement(content);
     const y = getTopForElement(content);
-    const cloneX = getLeftForElement(clone);
+    const cloneX = getLeftForElement(clone) - 2;
     const cloneY = getTopForElement(clone);
     let { translateX, translateY } = this.state;
-    if (cloneX !== (x + translateX) || cloneY !== (y + translateY)) {
+    if (x !== (cloneX + translateX) || y !== (cloneY + translateY)) {
       const xDiff = x - cloneX;
       const yDiff = y - cloneY;
       const newState = Object.assign(
         {},
         this.state,
         {
-          translateX: xDiff + 2,
+          translateX: xDiff,
           translateY: yDiff
         }
       );
-      //this.setState(newState);
+      //console.log(this.props.note.title, translateX)
+      this.setState(newState);
     }
   }
 

@@ -5,7 +5,7 @@ import findIndex from 'ramda/src/findIndex';
 export default (state, action) => {
   if (state === void 0) {
     return [
-      {
+      /*{
         title: 'A Note',
         body: 'This is a note',
         _id: '43434343434343'
@@ -14,7 +14,7 @@ export default (state, action) => {
         title: 'Another Note',
         body: 'This is another note...',
         _id: 'gfdg5645654dgf'
-      }
+      }*/
     ];
   }
   switch (action.type) {
@@ -51,6 +51,8 @@ export default (state, action) => {
         }
         return newState.concat(note);
       }, []);
+    case actionTypes.requestNotesComplete:
+      return action.notes;
     default:
       return state;
   }

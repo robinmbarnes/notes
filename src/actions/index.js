@@ -15,10 +15,13 @@ export const actionTypes = constantKeys([
   'noteDragStart',
   'noteDropReady',
   'noteDropped',
-  'draggedNotePositionChanged'
+  'draggedNotePositionChanged',
+  'requestNotesComplete',
+  'requestNotes',
+  'createNoteComplete'
 ]);
 
-function createAction (type, otherProps={}) {
+export function createAction (type, otherProps={}) {
   return () => Object.assign({}, otherProps, { type });
 }
 
@@ -120,3 +123,13 @@ export function noteDropReady (positionOfDraggedNote, dropZonePosition) {
     dropZonePosition
   };
 }
+
+export function requestNotesComplete (notes) {
+  return {
+    type: actionTypes.requestNotesComplete,
+    notes
+  };
+}
+
+export const requestNotes = createAction(actionTypes.requestNotes);
+export const createNoteComplete = createAction(actionTypes.createNoteComplete);

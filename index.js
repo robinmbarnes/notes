@@ -9,14 +9,20 @@ import App from 'containers/app';
 import noteApp from 'reducers';
 import 'styles/global.css';
 import 'babel-polyfill';
+import 'babel-regenerator-runtime';
 import 'babel-core/register';
+import { requestNotes } from 'actions';
+import createSagaMiddleware from 'redux-saga';
+import sagas from 'sagas';
 
 const logger = createLogger();
+const sagaMiddleware = createSagaMiddleware()
 const createStoreWithMiddleware = compose(
-  applyMiddleware(thunk, promise, logger),
+  applyMiddleware(sagaMiddleware, thunk, promise, logger),
   window.devToolsExtension ? window.devToolsExtension() : f => f
 )(createStore);
 const store = createStoreWithMiddleware(noteApp);
+sagaMiddleware.run(sagas);
 
 let rootElement = document.getElementById('root');
 render(
@@ -25,3 +31,5 @@ render(
   </Provider>,
   rootElement
 );
+
+store.dispatch(requestNotes());
