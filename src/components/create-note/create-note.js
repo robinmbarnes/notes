@@ -14,22 +14,24 @@ export default ({ isFresh, title, body, dispatch }) => {
   });
   return (
     <div className={ styles.container }>
-      <input
-        className={ titleClassNames }
-        type='text'
-        placeholder='Title'
-        value={ title }
-        onChange={ titleChanged(dispatch) }
-      />
-      <textarea
-        className={ styles.body }
-        placeholder='Add a note...'
-        value={ body }
-        onChange={ bodyChanged(isFresh, dispatch) }
-      >
-      </textarea>
-      <div className={ controlsClassNames }>
-        <a href='#' onClick={ doneClicked(dispatch) }>Done</a>
+      <div className={ styles.element }>
+        <input
+          className={ titleClassNames }
+          type='text'
+          placeholder='Title'
+          value={ title }
+          onChange={ titleChanged(dispatch) }
+        />
+        <textarea
+          className={ styles.body }
+          placeholder='Add a note...'
+          value={ body }
+          onChange={ bodyChanged(isFresh, dispatch) }
+        >
+        </textarea>
+        <div className={ controlsClassNames }>
+          <a href='#' onClick={ doneClicked(dispatch) }>Done</a>
+        </div>
       </div>
     </div>
   );

@@ -37,3 +37,7 @@
 .hidden {
   display: none;
 }
+
+.controls {
+  composes: button from 'styles/composables.css'
+}

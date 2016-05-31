@@ -53,7 +53,7 @@ export function createNoteSubmitted () {
     const { title, body } = state.createNote;
     dispatch({
       type: actionTypes.createNoteSubmitted,
-      note: { title, body, _id: uuid.v4() }
+      note: { title, body, _id: `temp_${uuid.v4()}` }
     });
   };
 }
@@ -132,4 +132,5 @@ export function requestNotesComplete (notes) {
 }
 
 export const requestNotes = createAction(actionTypes.requestNotes);
-export const createNoteComplete = createAction(actionTypes.createNoteComplete);
+export const createNoteComplete = (tempId, note) =>
+  createAction(actionTypes.createNoteComplete, { tempId, note })();

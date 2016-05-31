@@ -1,29 +1,15 @@
 import { actionTypes } from 'actions';
 import merge from 'ramda/src/merge';
 import findIndex from 'ramda/src/findIndex';
+import memoize from 'ramda/src/memoize';
 
 export default (state, action) => {
   if (state === void 0) {
-    return [
-      /*{
-        title: 'A Note',
-        body: 'This is a note',
-        _id: '43434343434343'
-      },
-      {
-        title: 'Another Note',
-        body: 'This is another note...',
-        _id: 'gfdg5645654dgf'
-      }*/
-    ];
+    return [];
   }
   switch (action.type) {
     case actionTypes.updateNoteSubmitted:
-      const noteIndex = findNoteIndexById(action.note._id, state);
-      return state
-        .slice(0, noteIndex)
-        .concat(action.note)
-        .concat(state.slice(noteIndex + 1));
+      return updateNoteById(state, action.note._id, action.note);
     case actionTypes.createNoteSubmitted:
       return [action.note].concat(state);
     case actionTypes.noteSelected:
@@ -53,12 +39,22 @@ export default (state, action) => {
       }, []);
     case actionTypes.requestNotesComplete:
       return action.notes;
+    case actionTypes.createNoteComplete:
+      return updateNoteById(state, action.tempId, action.note);
     default:
       return state;
   }
 };
 
-const findNoteIndexById = (_id, notes) => findIndex(
+const findNoteIndexById = memoize((_id, notes) => findIndex(
   note => note._id === _id,
   notes
-);
+));
+
+const updateNoteById = (notes, _id, newNote) => {
+  const noteIndex = findNoteIndexById(_id, notes);
+  return notes
+    .slice(0, noteIndex)
+    .concat(newNote)
+    .concat(notes.slice(noteIndex + 1));
+};

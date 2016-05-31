@@ -8,18 +8,19 @@ function * fetchNotes () {
   yield put(requestNotesComplete(response.body));
 }
 
-function * createNote ({ note: { body, title } }) {
-  const data = { body, title };
-  yield call(
+function * createNote ({ note: { _id: tempId, body, title } }) {
+  const data = { body, title, position: 0 };
+  const { body: note } = yield call(
     request.post,
     'http://localhost:8100/notes',
     { data }
   );
-  yield put(createNoteComplete());
+
+  yield put(createNoteComplete(tempId, note));
 }
 
-function * updateNote ({ note: { _id, body, title } }) {
-  const data = { body, title, _id };
+function * updateNote ({ note: { _id, body, title, position } }) {
+  const data = { body, title, _id, position };
   yield call(
     request.put,
     `http://localhost:8100/notes/${_id}`,
@@ -31,18 +32,11 @@ function * deleteNote ({ _id }) {
   yield call(request.delete, `http://localhost:8100/notes/${_id}`);
 }
 
-export function * createNoteSaga () {
-  yield * takeLatest(actionTypes.createNoteSubmitted, createNote);
-}
-
-export function * fetchNotesSaga () {
-  yield * takeEvery(actionTypes.requestNotes, fetchNotes);
-}
-
-export function * deleteNoteSaga () {
-  yield * takeEvery(actionTypes.noteDeleted, deleteNote);
-}
-
-export function * updateNoteSaga () {
-  yield * takeEvery(actionTypes.updateNoteSubmitted, updateNote);
+export default function * setupSagas () {
+  yield [
+    takeLatest(actionTypes.createNoteSubmitted, createNote),
+    takeEvery(actionTypes.requestNotes, fetchNotes),
+    takeEvery(actionTypes.noteDeleted, deleteNote),
+    takeEvery(actionTypes.updateNoteSubmitted, updateNote)
+  ];
 }

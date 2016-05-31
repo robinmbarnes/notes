@@ -7,7 +7,6 @@ import promise from 'redux-promise';
 import createLogger from 'redux-logger';
 import App from 'containers/app';
 import noteApp from 'reducers';
-import 'styles/global.css';
 import 'babel-polyfill';
 import 'babel-regenerator-runtime';
 import 'babel-core/register';

@@ -8,12 +8,21 @@
   background-color: white;
   border: 1px solid black;
   box-shadow: 2px 3px 8px 0px rgba(0,0,0,0.75);
-  width: 200px;
+  width: 180px;
+  padding: 10px;
   min-height: 350px;
   float: left;
   position: relative;
   cursor: pointer;
   z-index: 2;
+  word-wrap: break-word;
+}
+
+.content h2 {
+  padding-top: 0;
+  margin-top: 0;
+  line-height: 24px;
+  margin-bottom: 10px;
 }
 
 .delete {

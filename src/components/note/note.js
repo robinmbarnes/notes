@@ -43,6 +43,7 @@ class Note extends Component {
 
   _renderContent (isClone) {
     const { note, dispatch, position, positionOfDraggedNote } = this.props;
+    const hasTitle = (note.title !== void 0 && note.title.length > 0);
     const isInvisible = (
       positionOfDraggedNote === position ||
       (positionOfDraggedNote !== null && !isClone)
@@ -51,6 +52,9 @@ class Note extends Component {
       [styles.content]: true,
       [styles.isClone]: isClone,
       [styles.invisible]: isInvisible
+    });
+    const titleClassnames = classnames({
+      [styles.hidden]: !hasTitle
     });
     const cloneStyle = {
       top: this.state.y,
@@ -67,7 +71,7 @@ class Note extends Component {
         style={style}
         onClick={selectNote(note, dispatch)}
       >
-        <h2>{ note.title }</h2>
+        <h2 className={ titleClassnames }>{ note.title }</h2>
         <div>{ note.body }</div>
         <div className={ styles.delete }>
           <a href='#' onClick={ deleteNote(note._id, dispatch) }>X</a>
@@ -108,7 +112,6 @@ class Note extends Component {
           translateY: yDiff
         }
       );
-      //console.log(this.props.note.title, translateX)
       this.setState(newState);
     }
   }
@@ -137,6 +140,7 @@ class Note extends Component {
 
 const selectNote = (note, dispatch) => () => dispatch(actions.noteSelected(note));
 const deleteNote = (_id, dispatch) => (clickEvent) => {
+  clickEvent.preventDefault();
   clickEvent.stopPropagation();
   dispatch(actions.noteDeleted(_id));
 };

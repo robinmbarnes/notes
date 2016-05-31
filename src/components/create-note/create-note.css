@@ -1,9 +1,18 @@
 .container {
+  position: relative;
+  height: 45px;
+  margin-bottom: 30px;
+}
+
+.element {
   width: 600px;
   border: 1px solid grey;
   box-shadow: 0px 3px 9px 0px rgba(0,0,0,0.6);
   background-color: white;
-  margin: auto;
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .title {
@@ -23,6 +32,7 @@
 
 .controls {
   text-align: right;
+  composes: button from 'styles/composables.css';
 }
 
 .hidden {

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "mkdir -p dist && export NODE_PATH=$NODE_PATH:./src && ./node_modules/.bin/budo index.js --dir=dist --live -- -p [ css-modulesify -o dist/main.css --after autoprefixer --autoprefixer.browsers '> 5%' --json dist/css-modules.json] -o dist/index.js"
+    "start": "mkdir -p dist && cp ./index.html ./dist/index.html && cp ./global.css ./dist/global.css && export NODE_PATH=$NODE_PATH:./src && ./node_modules/.bin/budo index.js --dir=dist --live -- -p [ css-modulesify -o dist/main.css --after autoprefixer --autoprefixer.browsers '> 5%' --json dist/css-modules.json] -o dist/index.js"
   },
   "dependencies": {
     "autoprefixer": "^6.1.2",
